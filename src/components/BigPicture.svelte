@@ -23,7 +23,9 @@
     on:dragover={onDragOver}
 >
     {#if !deviceId}
-        <h1>CHYBA NENÍ NA VAŠEM PŘIJÍMAČI</h1>
+        <div class="w-full h-full grid place-items-center">
+            <h1>CHYBA NENÍ NA VAŠEM PŘIJÍMAČI</h1>
+        </div>
     {:else}
         <div class="absolute bg-black/30 px-2 py-1 right-0 z-10">
             <button 

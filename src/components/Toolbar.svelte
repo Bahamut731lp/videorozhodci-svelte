@@ -14,7 +14,7 @@
         $layout.columns = 2;
     }
 
-    function setLayout(value, key: keyof typeof $layout) {
+    function setLayout(value, key: keyof Omit<typeof $layout, "history">) {
         let parsedValue = parseInt(value);
         if (Number.isNaN(parsedValue)) return;
 
@@ -22,13 +22,12 @@
     }
 </script>
 
-<div
-    class="bg-neutral-200 dark:bg-neutral-900 w-full flex items-center justify-between p-2"
->
-    <div>
+<div class="bg-neutral-200 dark:bg-neutral-900 w-full grid grid-cols-3 p-2">
+    <div class="flex items-center gap-2">
         <button class="bg-green-600 px-4 py-2">Začátek zápasu</button>
+        <button class="bg-red-600 px-4 py-2">Začít přehrávat</button>
     </div>
-    <div class="flex gap-1">
+    <div class="place-self-center flex gap-1">
         <button class="bg-neutral-700 p-2" on:click={setOneWindowLayout}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -123,11 +122,43 @@
             </div>
         </div>
     </div>
-    <div>
+    <div class="place-self-end flex gap-2">
         <!-- 
-        Po kliknutí na tohle tlačítko vyjede spodní lišta, videa se pauznou a ukáží se místo toho playbacky
-        Nebude časová osa, bude prostě jenom dopředu a dozadu!
-    -->
-        <button class="bg-red-600 px-4 py-2">Začít přehrávat</button>
+            Po kliknutí na tohle tlačítko vyjede spodní lišta, videa se pauznou a ukáží se místo toho playbacky
+            Nebude časová osa, bude prostě jenom dopředu a dozadu!
+        -->
+        <button class="bg-neutral-700 p-2" on:click={setOneWindowLayout}>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                />
+            </svg>
+        </button>
+
+        <button class="bg-neutral-700 p-2" on:click={setOneWindowLayout}>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                />
+            </svg>
+        </button>
     </div>
 </div>
