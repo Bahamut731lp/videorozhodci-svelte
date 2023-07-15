@@ -1,25 +1,33 @@
 <script lang="ts">
-    import { layout } from "../stores/Layout";
+    import { layout, cursor } from "../stores/Layout";
 
-    let numberOfRows = $layout.rows;
-    let numberOfColumns = $layout.columns;
+    let numberOfRows = $layout[$cursor].rows;
+    let numberOfColumns = $layout[$cursor].columns;
 
     function setOneWindowLayout() {
-        $layout.rows = 1;
-        $layout.columns = 1;
+        $layout = [{rows: 1, columns: 1, devices: []}, ...$layout];
+        $cursor = 0;
     }
 
     function setTwoByTwoLayout() {
-        $layout.rows = 2;
-        $layout.columns = 2;
+        $layout = [{rows: 2, columns: 2, devices: []}, ...$layout];
+        $cursor = 0;
     }
 
     function setLayout(value, key: keyof Omit<typeof $layout, "history">) {
         let parsedValue = parseInt(value);
         if (Number.isNaN(parsedValue)) return;
 
-        $layout[key] = parsedValue;
+        $layout[$cursor][key] = parsedValue;
     }
+
+    function setHistoryCursorRelative(offset: number) {
+        let length = $layout.length;
+        let absolute = $cursor - offset;
+
+        $cursor = Math.min(length - 1, Math.max(0, absolute))
+    }
+
 </script>
 
 <div class="bg-neutral-200 dark:bg-neutral-900 w-full grid grid-cols-3 p-2">
@@ -127,7 +135,7 @@
             Po kliknutí na tohle tlačítko vyjede spodní lišta, videa se pauznou a ukáží se místo toho playbacky
             Nebude časová osa, bude prostě jenom dopředu a dozadu!
         -->
-        <button class="bg-neutral-700 p-2" on:click={setOneWindowLayout}>
+        <button class="bg-neutral-700 p-2" on:click={() => setHistoryCursorRelative(-1)}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -144,7 +152,7 @@
             </svg>
         </button>
 
-        <button class="bg-neutral-700 p-2" on:click={setOneWindowLayout}>
+        <button class="bg-neutral-700 p-2" on:click={() => setHistoryCursorRelative(1)}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

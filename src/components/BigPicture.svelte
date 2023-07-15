@@ -1,6 +1,6 @@
 <script>
     import Camera from "./Camera.svelte";
-    import { layout } from "../stores/Layout";
+    import { layout, cursor } from "../stores/Layout";
 
     export let deviceId = null;
     export let index = null;
@@ -12,8 +12,7 @@
     function onDragDrop(event) {
         event.preventDefault();
         deviceId = event.dataTransfer.getData("device");
-        $layout.history[$layout.cursor] ??= [];
-        $layout.history[$layout.cursor][index] = deviceId;
+        $layout[$cursor].devices[index] = deviceId;
     }
 
     function onDeleteClick(event) {
@@ -24,9 +23,12 @@
     function onCameraClick() {
         if (!deviceId) return;
 
-        $layout.rows = 1
-        $layout.columns = 1
-        $layout.history = [[deviceId], ...$layout.history]
+        if ($cursor > 0) {
+            $layout = $layout.slice($cursor);
+        }
+
+        $layout = [{rows: 1, columns: 1, devices: [deviceId]}, ...$layout];
+        $cursor = 0;
     }
 </script>
 
