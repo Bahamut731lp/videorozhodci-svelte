@@ -1,7 +1,9 @@
 <script>
     import Camera from "./Camera.svelte";
+    import { layout } from "../stores/Layout";
 
-    let deviceId = null;
+    export let deviceId = null;
+    export let index = null;
 
     function onDragOver(event) {
         event.preventDefault();
@@ -10,21 +12,33 @@
     function onDragDrop(event) {
         event.preventDefault();
         deviceId = event.dataTransfer.getData("device");
+        $layout.history[$layout.cursor] ??= [];
+        $layout.history[$layout.cursor][index] = deviceId;
     }
 
-    function onDeleteClick() {
+    function onDeleteClick(event) {
+        event.stopImmediatePropagation();
         deviceId = null;
+    }
+
+    function onCameraClick() {
+        if (!deviceId) return;
+
+        $layout.rows = 1
+        $layout.columns = 1
+        $layout.history = [[deviceId], ...$layout.history]
     }
 </script>
 
-<div
+<button
     class="bg-neutral-800 text-neutral-500 relative"
     on:drop={onDragDrop}
     on:dragover={onDragOver}
+    on:click={onCameraClick}
 >
     {#if !deviceId}
         <div class="w-full h-full grid place-items-center">
-            <h1>CHYBA NENÍ NA VAŠEM PŘIJÍMAČI</h1>
+            <h1>Prázdný slot na kameru</h1>
         </div>
     {:else}
         <div class="absolute bg-black/30 px-2 py-1 right-0 z-10">
@@ -51,4 +65,4 @@
 
         <Camera {deviceId} />
     {/if}
-</div>
+</button>

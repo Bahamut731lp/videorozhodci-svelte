@@ -15,8 +15,10 @@
     }
 </script>
 
-<section class="grid h-full w-full p-2 gap-2" {style}>
-    {#each { length } as _}
-        <BigPicture />
+<section class="grid h-full w-full p-2 gap-2 relative" {style}>
+    {#each { length } as _, index}
+        {#key $layout.history?.[$layout.cursor]?.[index] ?? null }
+            <BigPicture deviceId={$layout.history?.[$layout.cursor]?.[index] ?? null} {index}/>
+        {/key}
     {/each}
 </section>
