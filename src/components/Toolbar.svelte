@@ -1,5 +1,6 @@
 <script lang="ts">
     import { layout, cursor } from "../stores/Layout";
+    import { isRecording } from "../stores/Recording";
 
     let numberOfRows = $layout[$cursor].rows;
     let numberOfColumns = $layout[$cursor].columns;
@@ -28,11 +29,19 @@
         $cursor = Math.min(length - 1, Math.max(0, absolute))
     }
 
+    function setRecording() {
+        $isRecording = !$isRecording;
+    }
+
 </script>
 
 <div class="bg-neutral-200 dark:bg-neutral-900 w-full grid grid-cols-3 p-2">
-    <div class="flex items-center gap-2">
-        <button class="bg-green-600 px-4 py-2">Začátek zápasu</button>
+    <div class="grid grid-cols-2 items-center gap-2">
+        {#if !$isRecording}
+            <button on:click={() => { $isRecording = true }} class="bg-green-600 px-4 py-2">Zahájit zápas</button>
+        {:else}
+            <button on:click={() => { $isRecording = false }} class="bg-green-600 px-4 py-2">Ukončit zápas</button>
+        {/if}
         <button class="bg-red-600 px-4 py-2">Začít přehrávat</button>
     </div>
     <div class="place-self-center flex gap-1">
