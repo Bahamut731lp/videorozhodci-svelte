@@ -29,10 +29,6 @@
         $cursor = Math.min(length - 1, Math.max(0, absolute))
     }
 
-    function setRecording() {
-        $isRecording = !$isRecording;
-    }
-
 </script>
 
 <div class="bg-neutral-200 dark:bg-neutral-900 w-full grid grid-cols-3 p-2">
@@ -40,7 +36,7 @@
         {#if !$isRecording}
             <button on:click={() => { $isRecording = true }} class="bg-green-600 px-4 py-2">Zahájit zápas</button>
         {:else}
-            <button on:click={() => { $isRecording = false }} class="bg-green-600 px-4 py-2">Ukončit zápas</button>
+            <button on:click={() => { if (confirm("Jste si jistí, že chcete ukončit nahrávání kamer?")) $isRecording = false }} class="bg-green-600 px-4 py-2">Ukončit zápas</button>
         {/if}
         <button class="bg-red-600 px-4 py-2">Začít přehrávat</button>
     </div>

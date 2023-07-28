@@ -65,6 +65,6 @@
             </button>
         </div>
 
-        <Camera {deviceId} />
+        <Camera {deviceId} record={false} />
     {/if}
 </button>

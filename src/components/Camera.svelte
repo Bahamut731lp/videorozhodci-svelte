@@ -3,6 +3,7 @@
     import { isRecording } from "../stores/Recording";
 
     export let deviceId;
+    export let record = true;
 
     let videoSource = null;
     let loading = false;
@@ -10,11 +11,10 @@
     let mediaRecorder = null;
 
     $ : {
-        if (mediaRecorder) {
+        if (mediaRecorder && videoSource) {
             if ($isRecording) startRecording();
             else stopRecording();
         }
-
     }
 
     onMount(async () => {
@@ -35,23 +35,27 @@
             videoSource.play();
             loading = false;
 
-            mediaRecorder = new MediaRecorder(videoSource.captureStream(), {
-                mimeType: "video/webm"
-            });
-            
-            mediaRecorder.addEventListener('dataavailable', async function (e) {
-                fetch("http://127.0.0.1:8000/video", {
-                    method: "POST",
-                    headers: {
-                        "x-device": deviceId
-                    },
-                    body: e.data
-                });
-            });
-
         } catch (error) {
             console.error(error);
         }
+    });
+
+    onMount(async () => {
+        if (!deviceId || !videoSource || !record) return;
+
+        mediaRecorder = new MediaRecorder(videoSource.captureStream(), {
+            mimeType: "video/webm"
+        });
+        
+        mediaRecorder.addEventListener('dataavailable', async function (e) {
+            fetch("http://127.0.0.1:8000/video", {
+                method: "POST",
+                headers: {
+                    "x-device": deviceId
+                },
+                body: e.data
+            });
+        });
     });
 
     function onDragStart(event) {
