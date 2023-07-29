@@ -1,7 +1,10 @@
 <script lang="ts">
+    import { isExamining } from "./stores/Recording";
+
     import Sidebar from "./components/Sidebar.svelte";
     import Toolbar from "./components/Toolbar.svelte";
     import Previews from "./components/Previews.svelte";
+    import PlaybackControls from "./components/PlaybackControls.svelte"
 </script>
 
 <svelte:head>
@@ -16,6 +19,8 @@
     >
         <Toolbar/>
         <Previews/>
+
+        <svelte:component this={$isExamining ? PlaybackControls : null}/>
     </section>
 
     <Sidebar />

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { layout, cursor } from "../stores/Layout";
-    import { isRecording } from "../stores/Recording";
+    import { isExamining, isRecording } from "../stores/Recording";
 
     let numberOfRows = $layout[$cursor].rows;
     let numberOfColumns = $layout[$cursor].columns;
@@ -38,7 +38,12 @@
         {:else}
             <button on:click={() => { if (confirm("Jste si jistí, že chcete ukončit nahrávání kamer?")) $isRecording = false }} class="bg-green-600 px-4 py-2">Ukončit zápas</button>
         {/if}
-        <button class="bg-red-600 px-4 py-2">Začít přehrávat</button>
+
+        {#if !$isExamining}
+            <button on:click={() => { $isExamining = true }} class="bg-red-600 px-4 py-2">Přezkoumat záznam</button>
+        {:else}
+            <button on:click={() => { $isExamining = false }} class="bg-red-600 px-4 py-2">Ukončit přezkoumávání</button>
+        {/if}
     </div>
     <div class="place-self-center flex gap-1">
         <button class="bg-neutral-700 p-2" on:click={setOneWindowLayout}>
